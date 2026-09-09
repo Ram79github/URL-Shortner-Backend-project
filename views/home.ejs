@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <title>URL Shortener</title>
+  </head>
+
+  <body class="min-h-screen bg-gradient-to-br from-blue-100 via-white to-purple-100 px-4 py-10">
+    <main class="mx-auto w-full max-w-4xl space-y-8">
+      <!-- Form section: users submit the original URL here. -->
+      <section class="rounded-2xl bg-white p-6 shadow-xl sm:p-8">
+        <h1 class="mb-2 text-center text-3xl font-bold text-gray-800">
+          URL Shortener
+        </h1>
+
+        <p class="mb-8 text-center text-gray-500">
+          Create a short and shareable link
+        </p>
+
+        <form method="POST" action="/url" class="space-y-4">
+          <div>
+            <label
+              class="mb-2 block text-sm font-semibold text-gray-700"
+              for="url"
+            >
+              Enter your original URL
+            </label>
+
+            <input
+              class="w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-700 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+              type="url"
+              name="url"
+              placeholder="https://www.example.com"
+              required
+            />
+          </div>
+
+          <button
+            class="w-full rounded-lg bg-blue-600 px-4 py-3 font-semibold text-white transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300"
+            type="submit"
+          >
+            Generate Short URL
+          </button>
+        </form>
+        <!-- Show the newly created short URL only after a successful submission. -->
+        <% if (locals.shortenedURL) { %>
+          <div class="mt-6 rounded-xl border p-4 text-center <%= duplicateURL ? 'border-yellow-200 bg-yellow-50' : 'border-green-200 bg-green-50' %>">
+            <p class="mb-2 font-semibold <%= duplicateURL ? 'text-yellow-800' : 'text-green-800' %>">
+              <%= duplicateURL ? 'This URL already exists. Here is its short link:' : 'URL Generated Successfully!' %>
+            </p>
+
+            <a
+              class="break-all text-blue-600 underline hover:text-blue-800"
+              href="/<%= shortenedURL.shortId %>"
+            >
+              <%= shortenedURL.shortId %>
+            </a>
+          </div>
+        <% } %>
+      </section>
+
+      <!-- List section: this data comes from the URLs loaded by the home route. -->
+      <section class="rounded-2xl bg-white p-6 shadow-xl sm:p-8">
+        <div class="mb-5 flex items-center justify-between gap-4">
+          <h2 class="text-xl font-bold text-gray-800">Your short URLs</h2>
+          <% if (locals?.urls) { %>
+            <span class="rounded-full bg-blue-100 px-3 py-1 text-sm font-semibold text-blue-700">
+              <%= urls.length %> total
+            </span>
+          <% } %>
+        </div>
+
+        <% if (locals?.urls && urls.length > 0) { %>
+          <div class="overflow-x-auto rounded-xl border border-gray-200">
+            <table class="min-w-full divide-y divide-gray-200 text-left text-sm">
+              <thead class="bg-gray-50 text-xs uppercase tracking-wide text-gray-500">
+                <tr>
+                  <th class="px-4 py-3 font-semibold" scope="col">No.</th>
+                  <th class="px-4 py-3 font-semibold" scope="col">Short ID</th>
+                  <th class="px-4 py-3 font-semibold" scope="col">Redirect URL</th>
+                  <th class="px-4 py-3 text-center font-semibold" scope="col">Clicks</th>
+                  <th class="px-4 py-3 text-center font-semibold" scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-100 bg-white">
+                <% urls.forEach((url, index) => { %>
+                  <tr class="transition hover:bg-blue-50">
+                    <td class="whitespace-nowrap px-4 py-4 font-medium text-gray-500">
+                      <%= index + 1 %>
+                    </td>
+                    <td class="whitespace-nowrap px-4 py-4 font-semibold text-blue-600">
+                      <a href="/<%= url.shortId %>" class="hover:underline">
+                        <%= url.shortId %>
+                      </a>
+                    </td>
+                    <td class="max-w-xs truncate px-4 py-4 text-gray-600" title="<%= url.redirectURL %>">
+                      <%= url.redirectURL %>
+                    </td>
+                    <td class="px-4 py-4 text-center font-semibold text-gray-700">
+                      <%= url.visitHistory.length %>
+                    </td>
+                    <td class="px-4 py-4 text-center">
+                      <!-- Submit a POST request to delete this specific URL. -->
+                      <form method="POST" action="/url/delete/<%= url.shortId %>" onsubmit="return confirm('Delete this shortened URL?');">
+                        <button
+                          class="rounded-lg bg-red-100 px-3 py-2 text-xs font-semibold text-red-700 transition hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-red-300"
+                          type="submit"
+                        >
+                          Delete
+                        </button>
+                      </form>
+                    </td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        <% } else { %>
+          <!-- This message keeps the page useful before the first URL is created. -->
+          <p class="rounded-xl border border-dashed border-gray-300 bg-gray-50 px-4 py-8 text-center text-gray-500">
+            No shortened URLs yet. Create one above to get started.
+          </p>
+        <% } %>
+      </section>
+    </main>
+  </body>
+</html>

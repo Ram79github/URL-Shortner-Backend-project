@@ -27,6 +27,7 @@ const formatURLDates = (urlDocument) => {
 
 const generateNewShortURL = async (req, res) => {
     const originalURL = req.body?.url?.trim();
+    let normalizedURL;
 
     if (!originalURL) {
         return res.status(400).json({ error: "URL is required." });
@@ -37,19 +38,42 @@ const generateNewShortURL = async (req, res) => {
         if (!["http:", "https:"].includes(parsedURL.protocol)) {
             return res.status(400).json({ error: "URL must use HTTP or HTTPS." });
         }
+        normalizedURL = parsedURL.toString();
+
+        // Reuse the existing short URL instead of creating a duplicate record.
+        const existingURL = await URL.findOne({ redirectURL: normalizedURL });
+        if (existingURL) {
+            return res.render("home", {
+                shortenedURL: formatURLDates(existingURL),
+                duplicateURL: true
+            });
+        }
 
         const shortId = nanoid(8);
         const shortenedURL = await URL.create({
             shortId,
-            redirectURL: parsedURL.toString(),
+            redirectURL: normalizedURL,
             visitHistory: []
         });
-
+        return res.render("home",{
+            shortenedURL: formatURLDates(shortenedURL)
+        })
+        /*this part is for only json response 
         return res.status(201).json({
             message: "URL generated successfully.",
             shortenedURL: formatURLDates(shortenedURL)
-        });
+        });*/
     } catch (error) {
+        // A unique-index conflict can happen if two requests arrive together.
+        if (error.code === 11000 && error.keyPattern?.redirectURL) {
+            const existingURL = await URL.findOne({ redirectURL: normalizedURL });
+            if (existingURL) {
+                return res.render("home", {
+                    shortenedURL: formatURLDates(existingURL),
+                    duplicateURL: true
+                });
+            }
+        }
         return res.status(500).json({ error: "Unable to create shortened URL." });
     }
 };
@@ -57,7 +81,7 @@ const generateNewShortURL = async (req, res) => {
 const redirectURL = async (req, res) => {
     try {
         const dbEntry = await URL.findOneAndUpdate(
-            { shortId: req.params.shortId },
+            { shortId: req.params?.shortId },
             {
                 $push: {
                     visitHistory: {
@@ -99,6 +123,21 @@ const handleAnalytics = async (req, res) => {
     }
 };
 
+// Delete a shortened URL and return to the list page.
+const deleteShortURL = async (req, res) => {
+    try {
+        const deletedURL = await URL.findOneAndDelete({ shortId: req.params?.shortId });
+
+        if (!deletedURL) {
+            return res.status(404).json({ error: "Short URL not found." });
+        }
+
+        return res.redirect("/");
+    } catch (error) {
+        return res.status(500).json({ error: "Unable to delete shortened URL." });
+    }
+};
+
 
 
 
@@ -107,5 +146,6 @@ const handleAnalytics = async (req, res) => {
 export {
     generateNewShortURL,
     redirectURL,
-    handleAnalytics
+    handleAnalytics,
+    deleteShortURL
 };
