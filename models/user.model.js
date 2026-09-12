@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const userSchema =new mongoose.Schema({
-    name:{
+    fullname:{
         type:String,
         required:true,
     },
@@ -15,7 +15,7 @@ const userSchema =new mongoose.Schema({
         required:true
     },
     profileImg:{
-        type:string // by claudnary
+        type:String,
     }
 },{timestamps:true})
 

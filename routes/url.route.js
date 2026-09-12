@@ -3,17 +3,20 @@ import {
     generateNewShortURL,
     redirectURL,
     handleAnalytics,
-    deleteShortURL
+    deleteShortURL,
 } from "../controller/url.controller.js";
-const router = express.Router();
+
+// Routes used by logged-in users to manage their short URLs.
+const urlRouter = express.Router();
+urlRouter.post("/", generateNewShortURL);
+urlRouter.delete("/:shortId", deleteShortURL);
+urlRouter.get("/:shortId/analytics", handleAnalytics);
+
+// Public route used when someone opens a short URL.
 const redirectRouter = express.Router();
-
-router.post("/", generateNewShortURL);
-router.post("/delete/:shortId", deleteShortURL);
 redirectRouter.get("/:shortId", redirectURL);
-router.get("/analytics/:shortId", handleAnalytics);
 
+export { urlRouter, redirectRouter };
 
-export { router as urlRouter, redirectRouter };
 
 

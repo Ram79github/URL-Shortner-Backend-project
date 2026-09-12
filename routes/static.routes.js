@@ -1,16 +1,23 @@
 import express from "express";
-import {URL} from "../models/url.model.js";
+import { URL } from "../models/url.model.js";
 
-const router = express.Router();
+const pageRouter = express.Router();
 
-//static router declaration
+pageRouter.get("/", async (req, res) => {
+  if (!req.user) {
+    return res.redirect("/login");
+  }
 
-router.get("/", async (_req, res) => {
-    // getting all urls 
-  const allUrls = await URL.find({});
-  return res.render("home", 
-    { urls: allUrls }
-);
+  const urls = await URL.find({ createdBy: req.user._id });
+  return res.render("home", { urls });
 });
 
-export default router;
+pageRouter.get("/signup", (_req, res) => {
+  return res.render("signup");
+});
+
+pageRouter.get("/login", (_req, res) => {
+  return res.render("login");
+});
+
+export default pageRouter;
