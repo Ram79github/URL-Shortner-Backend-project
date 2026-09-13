@@ -4,11 +4,13 @@ import { setUser } from "../service/auth.service.js";
 
 const normalizeEmail = (email) => email?.trim().toLowerCase();
 
+/*replacing this session based auth with jwt token based auth
+
 const startUserSession = (res, user) => {
   const sessionId = uuidv4();
   setUser(sessionId, user);
   res.cookie("uid", sessionId);
-};
+};*/
 
 const handleUserSignUp = async (req, res) => {
   try {
@@ -53,8 +55,9 @@ const handleLogin = async (req, res) => {
     if (!user) {
       return res.render("login", { message: "Invalid email or password." });
     }
-
-    startUserSession(res, user);
+    //assigning token
+    const token = setUser(user)
+    res.cookie("uid",token);
     return res.redirect("/");
   } catch (error) {
     console.error("User login failed:", error);

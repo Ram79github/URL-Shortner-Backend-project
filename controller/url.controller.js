@@ -53,7 +53,7 @@ const redirectURL = async (req, res) => {
         const url = await UrlModel.findOneAndUpdate(
             { shortId: req.params.shortId },
             { $push: { visitHistory: { timestamp: new Date() } } },
-            { new: true }
+            { returnDocument: "after" }
         );
 
         if (!url) {
