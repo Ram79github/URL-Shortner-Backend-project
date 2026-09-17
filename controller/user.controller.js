@@ -57,8 +57,10 @@ const handleLogin = async (req, res) => {
     }
     //assigning token
     const token = setUser(user)
-    res.cookie("uid",token);
-    return res.redirect("/");
+    //res.cookie("uid",token);
+    //implement response based auth
+    //return res.redirect("/");
+    return res.json({token});
   } catch (error) {
     console.error("User login failed:", error);
     return res.status(500).json({ message: "Unable to login." });
