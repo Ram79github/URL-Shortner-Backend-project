@@ -1,7 +1,4 @@
 import express from "express";
-<<<<<<< HEAD
-import { handleLogin, handleUserSignUp } from "../controller/user.controller.js";
-=======
 import {
   handleLogin,
   handleUserSignUp,
@@ -12,16 +9,11 @@ import {
 } from "../controller/user.controller.js";
 import { restrictTo } from "../middlewares/auth.middleware.js";
 import { uploadProfileImage } from "../middlewares/upload.middleware.js";
->>>>>>> Feature
 
 const userRouter = express.Router();
 
 userRouter.post("/signup", handleUserSignUp);
 userRouter.post("/login", handleLogin);
-<<<<<<< HEAD
-
-export { userRouter };
-=======
 userRouter.post("/logout", handleLogout);
 
 // Profile image upload — stored in local folder uploads/profiles (not Cloudinary)
@@ -43,6 +35,7 @@ userRouter.post(
   },
   handleProfileUpload
 );
+  userRouter.post("/logout", handleLogout);
 
 // Remove profile photo (deletes local file)
 userRouter.post(
@@ -59,4 +52,4 @@ userRouter.post(
 );
 
 export { userRouter };
->>>>>>> Feature
+

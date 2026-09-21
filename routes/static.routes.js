@@ -1,19 +1,5 @@
 import express from "express";
 import { URL } from "../models/url.model.js";
-<<<<<<< HEAD
-
-const pageRouter = express.Router();
-
-pageRouter.get("/", async (req, res) => {
-  if (!req.user) {
-    return res.redirect("/login");
-  }
-
-  const urls = await URL.find({ createdBy: req.user._id });
-  return res.render("home", { urls });
-});
-
-=======
 import User from "../models/user.model.js";
 import { restrictTo } from "../middlewares/auth.middleware.js";
 import { handleGetProfile } from "../controller/user.controller.js";
@@ -44,8 +30,6 @@ pageRouter.get("/", restrictTo(["NORMAL", "ADMIN"]), async (req, res) => {
 });
 
 pageRouter.get("/profile", restrictTo(["NORMAL", "ADMIN"]), handleGetProfile);
-
->>>>>>> Feature
 pageRouter.get("/signup", (_req, res) => {
   return res.render("signup");
 });

@@ -4,84 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script src="https://cdn.tailwindcss.com"></script>
-<<<<<<< HEAD
-  <title>URL Shortener</title>
-</head>
-<body class="min-h-screen bg-gray-100 p-4 text-gray-800 sm:p-8">
-  <% const userUrls = locals.urls || []; %>
-
-  <main class="mx-auto max-w-4xl space-y-6">
-    <section class="rounded-lg bg-white p-6 shadow">
-      <h1 class="text-2xl font-bold">URL Shortener</h1>
-      <p class="mt-1 text-gray-600">Create a shorter link from a long URL.</p>
-
-      <form action="/urls" method="POST" class="mt-6 space-y-4">
-        <div>
-          <label for="url" class="mb-1 block font-medium">Original URL</label>
-          <input
-            id="url"
-            name="url"
-            type="url"
-            placeholder="https://example.com"
-            required
-            class="w-full rounded border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
-          />
-        </div>
-        <button type="submit" class="w-full rounded bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700">
-          Create short URL
-        </button>
-      </form>
-
-      <% if (locals.shortenedURL) { %>
-        <div class="mt-4 rounded border border-green-200 bg-green-50 p-4">
-          <p class="font-medium">
-            <%= locals.duplicateURL ? "This URL already exists:" : "Your short URL:" %>
-          </p>
-          <a href="/<%= shortenedURL.shortId %>" class="text-blue-600 underline">
-            <%= shortenedURL.shortId %>
-          </a>
-        </div>
-      <% } %>
-    </section>
-
-    <section class="rounded-lg bg-white p-6 shadow">
-      <h2 class="text-xl font-bold">Your URLs (<%= userUrls.length %>)</h2>
-
-      <% if (userUrls.length === 0) { %>
-        <p class="mt-4 text-gray-600">You have not created any short URLs yet.</p>
-      <% } else { %>
-        <div class="mt-4 overflow-x-auto">
-          <table class="min-w-full border text-left text-sm">
-            <thead class="bg-gray-100">
-              <tr>
-                <th class="border p-3">Short link</th>
-                <th class="border p-3">Original URL</th>
-                <th class="border p-3">Clicks</th>
-                <th class="border p-3">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% userUrls.forEach((url) => { %>
-                <tr>
-                  <td class="border p-3">
-                    <a href="/<%= url.shortId %>" class="text-blue-600 underline">
-                      <%= url.shortId %>
-                    </a>
-                  </td>
-                  <td class="max-w-xs truncate border p-3" title="<%= url.redirectURL %>">
-                    <%= url.redirectURL %>
-                  </td>
-                  <td class="border p-3"><%= url.visitHistory.length %></td>
-                  <td class="border p-3">
-                    <form data-short-id="<%= url.shortId %>" onsubmit="deleteUrl(event)">
-                      <button type="submit" class="text-red-600 underline">Delete</button>
-                    </form>
-                  </td>
-                </tr>
-              <% }) %>
-            </tbody>
-          </table>
-=======
   <script>
     tailwind.config = {
       theme: {
@@ -306,24 +228,11 @@
               </div>
             </article>
           <% }) %>
->>>>>>> Feature
         </div>
       <% } %>
     </section>
   </main>
 
-<<<<<<< HEAD
-  <script>
-    async function deleteUrl(event) {
-      event.preventDefault();
-
-      if (!confirm("Delete this shortened URL?")) {
-        return;
-      }
-
-      const shortId = event.currentTarget.dataset.shortId;
-      const response = await fetch(`/urls/${shortId}`, { method: "DELETE" });
-=======
   <footer class="border-t border-slate-200/80 py-6 text-center text-sm text-slate-400">
     Shortly — simple, fast URL shortener
   </footer>
@@ -358,16 +267,11 @@
 
       const shortId = event.currentTarget.dataset.shortId;
       const response = await fetch('/urls/' + shortId, { method: 'DELETE' });
->>>>>>> Feature
 
       if (response.ok) {
         window.location.reload();
       } else {
-<<<<<<< HEAD
-        alert("Unable to delete shortened URL.");
-=======
         alert('Unable to delete this link. Please try again.');
->>>>>>> Feature
       }
     }
   </script>

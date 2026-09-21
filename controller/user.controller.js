@@ -1,19 +1,3 @@
-<<<<<<< HEAD
-import User from "../models/user.model.js";
-import { v4 as uuidv4 } from "uuid";
-import { setUser } from "../service/auth.service.js";
-
-const normalizeEmail = (email) => email?.trim().toLowerCase();
-
-/*replacing this session based auth with jwt token based auth
-
-const startUserSession = (res, user) => {
-  const sessionId = uuidv4();
-  setUser(sessionId, user);
-  res.cookie("uid", sessionId);
-};*/
-
-=======
 import fs from "fs";
 import path from "path";
 import User from "../models/user.model.js";
@@ -21,8 +5,6 @@ import { setUser } from "../service/auth.service.js";
 import { uploadsDir } from "../middlewares/upload.middleware.js";
 
 const normalizeEmail = (email) => email?.trim().toLowerCase();
-
->>>>>>> Feature
 const handleUserSignUp = async (req, res) => {
   try {
     const name = req.body?.name?.trim();
@@ -66,15 +48,6 @@ const handleLogin = async (req, res) => {
     if (!user) {
       return res.render("login", { message: "Invalid email or password." });
     }
-<<<<<<< HEAD
-    //assigning token
-    const token = setUser(user)
-    //res.cookie("uid",token);
-    //implement response based auth
-    //return res.redirect("/");
-    return res.json({token});
-=======
-
     const token = setUser(user);
     res.cookie("token", token, {
       httpOnly: true,
@@ -82,16 +55,12 @@ const handleLogin = async (req, res) => {
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
     return res.redirect("/");
->>>>>>> Feature
   } catch (error) {
     console.error("User login failed:", error);
     return res.status(500).json({ message: "Unable to login." });
   }
 };
 
-<<<<<<< HEAD
-export { handleUserSignUp, handleLogin };
-=======
 const handleLogout = (req, res) => {
   res.clearCookie("token");
   return res.redirect("/login");
@@ -287,4 +256,3 @@ export {
   handleGetProfile,
   handleUpdateProfile,
 };
->>>>>>> Feature

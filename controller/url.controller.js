@@ -1,12 +1,5 @@
 import { nanoid } from "nanoid";
 import { URL as UrlModel } from "../models/url.model.js";
-<<<<<<< HEAD
-
-const renderShortenedUrl = (res, urlDocument, duplicateURL = false) => {
-    return res.render("home", {
-        shortenedURL: urlDocument.toObject(),
-        duplicateURL,
-=======
 import User from "../models/user.model.js";
 
 const loadFullUser = async (req) => {
@@ -26,7 +19,6 @@ const renderHomeWithUrls = async (res, req, extra = {}) => {
         urls,
         user,
         ...extra,
->>>>>>> Feature
     });
 };
 
@@ -47,14 +39,10 @@ const generateNewShortURL = async (req, res) => {
         normalizedURL = parsedURL.toString();
         const existingURL = await UrlModel.findOne({ redirectURL: normalizedURL });
         if (existingURL) {
-<<<<<<< HEAD
-            return renderShortenedUrl(res, existingURL, true);
-=======
             return renderHomeWithUrls(res, req, {
                 shortenedURL: existingURL.toObject(),
                 duplicateURL: true,
             });
->>>>>>> Feature
         }
 
         const shortenedURL = await UrlModel.create({
@@ -64,26 +52,18 @@ const generateNewShortURL = async (req, res) => {
             createdBy: req.user._id,
         });
 
-<<<<<<< HEAD
-        return renderShortenedUrl(res, shortenedURL);
-=======
         return renderHomeWithUrls(res, req, {
             shortenedURL: shortenedURL.toObject(),
             duplicateURL: false,
         });
->>>>>>> Feature
     } catch (error) {
         if (error.code === 11000 && error.keyPattern?.redirectURL) {
             const existingURL = await UrlModel.findOne({ redirectURL: normalizedURL });
             if (existingURL) {
-<<<<<<< HEAD
-                return renderShortenedUrl(res, existingURL, true);
-=======
                 return renderHomeWithUrls(res, req, {
                     shortenedURL: existingURL.toObject(),
                     duplicateURL: true,
                 });
->>>>>>> Feature
             }
         }
 
@@ -144,11 +124,7 @@ const deleteShortURL = async (req, res) => {
             return res.status(404).json({ error: "Short URL not found." });
         }
 
-<<<<<<< HEAD
-        return res.redirect("/");
-=======
         return res.status(200).json({ success: true });
->>>>>>> Feature
     } catch (error) {
         return res.status(500).json({ error: "Unable to delete shortened URL." });
     }
@@ -158,10 +134,5 @@ export {
     generateNewShortURL,
     redirectURL,
     handleAnalytics,
-<<<<<<< HEAD
-    deleteShortURL
-};
-=======
     deleteShortURL,
 };
->>>>>>> Feature
