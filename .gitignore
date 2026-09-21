@@ -62,3 +62,11 @@ temp/
 *.swp
 *.swo
 *~
+<<<<<<< HEAD
+=======
+
+# Uploaded files (keep folder, ignore contents)
+uploads/profiles/*
+!uploads/profiles/.gitkeep
+
+>>>>>>> Feature

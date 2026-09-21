@@ -1,7 +1,12 @@
 {
   "name": "url-shortner",
+<<<<<<< HEAD
   "version": "1.0.0",
   "description": "",
+=======
+  "version": "1.2.0",
+  "description": "Modern URL shortener with clean UI — create, track, and manage short links",
+>>>>>>> Feature
   "license": "ISC",
   "author": "",
   "type": "module",
@@ -17,6 +22,10 @@
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.9.5",
+<<<<<<< HEAD
+=======
+    "multer": "^2.0.2",
+>>>>>>> Feature
     "nanoid": "^6.0.1",
     "uuid": "^14.0.2"
   },
